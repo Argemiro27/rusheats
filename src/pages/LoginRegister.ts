@@ -76,3 +76,40 @@ export const Button = styled.button`
     box-shadow: 2px 2px 2px #21162b;
   }
 `;
+
+export const ErrorMessage = styled.span`
+  display: block;
+  position: fixed;
+  top: 20px;
+  left: 0px;
+  padding: 10px;
+  border-radius: 0px 10px 15px 0px;
+  background-color: red;
+  color: #fff;
+  font-weight: bold;
+  font-size: 15px;
+  box-shadow: 0 0 10px #ad4b4b;
+  animation: errorAnimation 0.5s ease-in-out 0s 3;
+  
+  @keyframes errorAnimation {
+    0% {
+      transform: translateY(0);
+    }
+    20% {
+      transform: translateY(-10px);
+    }
+    40% {
+      transform: translateY(0);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+    80% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-2px);
+    }
+  }
+`;
+
