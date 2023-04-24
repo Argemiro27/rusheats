@@ -1,0 +1,17 @@
+export const colors = {
+    primary: "#de8304",
+    secondary: "#ffc107",
+    button: "#4a2b64",
+    third: "#ffb74d",
+    thirdLight: "#ffe9ca",
+    white: "#ffffff",
+    black: "#000000",
+    success: "#50ba9e",
+    danger: "#660000",
+    contentBg: "#141414",
+    lightgray: "#303030",
+    darkgray: "#080808",
+    borderBg: "#4a2b64",
+    btnSubmit: "#50ba9e",
+    borderbtnSubmit: "#48b04d",
+};

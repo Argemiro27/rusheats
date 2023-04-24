@@ -1,2 +1,7 @@
 export { default as LoginPage } from "./Login"
 export { default as RegistroPage } from "./Registro"
+export { default as HomePage } from "./Dashboard/Home/Home"
+export { default as Adm } from "./Adm"
+export { default as Carrinho } from "./Dashboard/Carrinho"
+export { default as Perfil } from "./Dashboard/Perfil"
+export { default as Produtos } from "./Dashboard/Produtos"

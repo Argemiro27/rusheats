@@ -7,7 +7,7 @@ type LogoProps = {
 const Logo: React.FC<LogoProps> = ({ alt }) => {
   return (
     <img
-      src="/logo.png"
+      src="assets/logo.png"
       alt={alt}
       style={{ maxWidth: "50%", height: "auto" }}
     />

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors } from "../styles/GlobalStyle";
+import { colors } from "../styles/colors";
 
 export const Container = styled.div`
   display: flex;
@@ -7,7 +7,6 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: ${colors.primary};
 `;
 
 export const Card = styled.div`
@@ -15,13 +14,13 @@ export const Card = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #141414;
+  background-color: ${colors.contentBg};
   border-radius: 15px;
   max-width: 250px;
   padding: 25px;
-  color: #454545;
-  border: 1px solid #4a2b64;
-  box-shadow: 3px 3px 3px #000;
+  color: ${colors.lightgray};
+  border: 1px solid ${colors.borderBg};
+  box-shadow: 3px 3px 3px ${colors.black};
 `;
 
 export const Form = styled.form`

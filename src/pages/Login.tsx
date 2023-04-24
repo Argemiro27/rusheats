@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import * as S from "./LoginRegister";
 import Logo from "../components/Img/Logo";
+import axios, { AxiosError } from "axios";
+
+
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -9,27 +12,23 @@ const LoginForm = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!email || !password) {
-      setErrorMessage("Por favor, preencha todos os campos!");
-      return;
-    }
+    setErrorMessage("");
+
     try {
-      const response = await fetch("url_do_servidor/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+      const response = await axios.post("http://127.0.0.1:8000/login", {
+        email,
+        password,
       });
-      if (!response.ok) {
-        setErrorMessage("As credenciais de login estão incorretas!");
-        return;
+      const { access_token } = response.data;
+      localStorage.setItem("token", access_token); // armazenando o token no localStorage
+      // redirecionando o usuário para outra página após o login
+      window.location.href = "/home";
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage("Erro ao tentar fazer login. Tente novamente.");
       }
-      // Se o login for bem-sucedido, redirecione o usuário para a página principal
-      window.location.href = "/pagina-principal";
-    } catch (error) {
-      console.error("Ocorreu um erro ao fazer login:", error);
-      setErrorMessage("Ocorreu um erro ao fazer login!");
     }
   };
 

@@ -1,20 +1,42 @@
 import React, { useState } from "react";
 import * as S from "./LoginRegister";
 import Logo from "../components/Img/Logo";
+import axios, { AxiosError } from "axios";
 
 const RegistroForm = () => {
-  const [nome, setNome] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!nome || !email || !password) {
-      setErrorMessage("Por favor preencha todos os campos.");
+    setErrorMessage("");
+
+    if (password !== confirmPassword) {
+      setErrorMessage("As senhas não correspondem.");
       return;
     }
-    console.log(`Nome: ${nome}, Email: ${email}, Password: ${password}`);
+
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/register", {
+        name,
+        email,
+        password,
+      });
+      const { access_token } = response.data;
+      localStorage.setItem("token", access_token);
+      window.location.href = "/dashboard";
+    } catch (error: AxiosError | any) {
+      if (error.response) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage(
+          "Erro ao tentar se registrar. Tente novamente mais tarde."
+        );
+      }
+    }
   };
 
   return (
@@ -23,12 +45,12 @@ const RegistroForm = () => {
       <S.Title>Registro</S.Title>
       <S.Form onSubmit={handleSubmit}>
         <S.InputField>
-          <S.Label htmlFor="nome">Nome:</S.Label>
+          <S.Label htmlFor="name">Nome:</S.Label>
           <S.Input
             type="text"
-            id="nome"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </S.InputField>
         <S.InputField>
@@ -47,6 +69,14 @@ const RegistroForm = () => {
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+          />
+        </S.InputField>
+        <S.InputField>
+          <S.Label htmlFor="password">Confirme o password:</S.Label>
+          <S.Input
+            type="password"
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.target.value)}
           />
         </S.InputField>
         {errorMessage && <S.ErrorMessage>{errorMessage}</S.ErrorMessage>}

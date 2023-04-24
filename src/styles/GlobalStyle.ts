@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components"
+import { colors } from "../styles/colors";
 
 export default createGlobalStyle`
   * {
@@ -9,21 +10,14 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-family: 'Play', sans-serif;
+    
   }
   h1{
     font-family: 'Merienda', cursive;
+    margin-bottom: 25px;
   }
-
+  body{
+    background-color: ${colors.primary};
+  }
 `
 
-export const colors = {
-    primary: "#de8304",
-    secondary: "#ffc107",
-    button: "#4a2b64",
-    third: "#ffb74d",
-    thirdLight: "#ffe9ca",
-    white: "#ffffff",
-    black: "#000000",
-    success: "#50ba9e",
-    danger: "#660000",
-};
