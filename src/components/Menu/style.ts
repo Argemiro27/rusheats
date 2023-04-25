@@ -26,7 +26,7 @@ export const Icon = styled.div`
   height: 80px;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
-
+  color: ${colors.borderBg};
   &:hover {
     background-color: ${colors.primary};
   }
