@@ -13,9 +13,6 @@ const Menu = () => {
         <Link to={"/produtos"}><S.Icon>
           <FaHamburger size={20} />
         </S.Icon></Link>
-        <Link to={"/carrinho"}><S.Icon>
-          <FaShoppingCart size={20} />
-        </S.Icon></Link>
         <Link to={"/perfil"}><S.Icon>
           <FaUserAlt size={20} />
         </S.Icon></Link>

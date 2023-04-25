@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import * as S from "./LoginRegister";
 import Logo from "../components/Img/Logo";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { auth } from "../services/firebaseConfig";
 
 const RegistroForm = () => {
   const [name, setName] = useState("");
@@ -10,40 +12,52 @@ const RegistroForm = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setErrorMessage("");
+  //const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //  event.preventDefault();
+  //  setErrorMessage("");
+//
+  //  if (password !== confirmPassword) {
+  //    setErrorMessage("As senhas não correspondem.");
+  //    return;
+  //  }
+//
+  //  try {
+  //    const response = await axios.post("http://127.0.0.1:8000/register", {
+  //      name,
+  //      email,
+  //      password,
+  //    });
+  //    const { access_token } = response.data;
+  //    localStorage.setItem("token", access_token);
+  //    window.location.href = "/dashboard";
+  //  } catch (error: AxiosError | any) {
+  //    if (error.response) {
+  //      setErrorMessage(error.response.data.message);
+  //    } else {
+  //      setErrorMessage(
+  //        "Erro ao tentar se registrar. Tente novamente mais tarde."
+  //      );
+  //    }
+  //  }
+  //};
+  const [createUserWithEmailAndPassword, user, error] =
+    useCreateUserWithEmailAndPassword(auth);
 
-    if (password !== confirmPassword) {
-      setErrorMessage("As senhas não correspondem.");
-      return;
+  function handleSignOut(e: { preventDefault: () => void; }) {
+    e.preventDefault();
+    createUserWithEmailAndPassword(email, password);
+    if (user){
+      window.location.href = "/login";
+    } else if (error){
+      setErrorMessage("Erro ao tentar se registrar. Tente novamente.");
     }
-
-    try {
-      const response = await axios.post("http://127.0.0.1:8000/register", {
-        name,
-        email,
-        password,
-      });
-      const { access_token } = response.data;
-      localStorage.setItem("token", access_token);
-      window.location.href = "/dashboard";
-    } catch (error: AxiosError | any) {
-      if (error.response) {
-        setErrorMessage(error.response.data.message);
-      } else {
-        setErrorMessage(
-          "Erro ao tentar se registrar. Tente novamente mais tarde."
-        );
-      }
-    }
-  };
+  }
 
   return (
     <S.Card>
       <Logo alt="My Logo" />
       <S.Title>Registro</S.Title>
-      <S.Form onSubmit={handleSubmit}>
+      <S.Form>
         <S.InputField>
           <S.Label htmlFor="name">Nome:</S.Label>
           <S.Input
@@ -80,7 +94,7 @@ const RegistroForm = () => {
           />
         </S.InputField>
         {errorMessage && <S.ErrorMessage>{errorMessage}</S.ErrorMessage>}
-        <S.Button type="submit">Registro</S.Button>
+        <S.Button type="submit" onClick={handleSignOut}>Registro</S.Button>
       </S.Form>
       <a href="/login">
         <S.Button>Fazer login</S.Button>

@@ -2,35 +2,48 @@ import React, { useState } from "react";
 import * as S from "./LoginRegister";
 import Logo from "../components/Img/Logo";
 import axios, { AxiosError } from "axios";
-
-
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { auth } from "../services/firebaseConfig";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setErrorMessage("");
+  const [signInWithEmailAndPassword, user, error] =
+    useSignInWithEmailAndPassword(auth);
 
-    try {
-      const response = await axios.post("http://127.0.0.1:8000/login", {
-        email,
-        password,
-      });
-      const { access_token } = response.data;
-      localStorage.setItem("token", access_token); // armazenando o token no localStorage
-      // redirecionando o usuário para outra página após o login
+  function handleSignIn(e: { preventDefault: () => void; }) {
+    e.preventDefault();
+    signInWithEmailAndPassword(email, password);
+    if (user) {
       window.location.href = "/home";
-    } catch (error: AxiosError | any) {
-      if (error.response) {
-        setErrorMessage(error.response.data.message);
-      } else {
-        setErrorMessage("Erro ao tentar fazer login. Tente novamente.");
-      }
+    }else if (error){
+      setErrorMessage("Erro ao tentar fazer login. Tente novamente.");
     }
-  };
+  }
+
+  //const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  //  event.preventDefault();
+  //  setErrorMessage("");
+//
+  //  try {
+  //    const response = await axios.post("http://127.0.0.1:8000/login", {
+  //      email,
+  //      password,
+  //    });
+  //    const { access_token } = response.data;
+  //    localStorage.setItem("token", access_token); // armazenando o token no localStorage
+  //    // redirecionando o usuário para outra página após o login
+  //    window.location.href = "/home";
+  //  } catch (error: AxiosError | any) {
+  //    if (error.response) {
+  //      setErrorMessage(error.response.data.message);
+  //    } else {
+  //      setErrorMessage("Erro ao tentar fazer login. Tente novamente.");
+  //    }
+  //  }
+  //};
 
   return (
     <S.Container>
@@ -38,7 +51,7 @@ const LoginForm = () => {
         <Logo alt="My Logo" />
         <S.Title>Login</S.Title>
         {errorMessage && <S.ErrorMessage>{errorMessage}</S.ErrorMessage>}
-        <S.Form onSubmit={handleSubmit}>
+        <S.Form>
           <S.InputField>
             <S.Label htmlFor="email">Email:</S.Label>
             <S.Input
@@ -57,7 +70,7 @@ const LoginForm = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </S.InputField>
-          <S.Button type="submit">Login</S.Button>
+          <S.Button type="submit" onClick={handleSignIn}>Login</S.Button>
         </S.Form>
         <a href="/registro">
           <S.Button>Register</S.Button>
