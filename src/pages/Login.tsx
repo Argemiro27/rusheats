@@ -10,11 +10,12 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [signInWithEmailAndPassword, user, error] =
+  const [signInWithEmailAndPassword, user,  error] =
     useSignInWithEmailAndPassword(auth);
 
   function handleSignIn(e: { preventDefault: () => void; }) {
     e.preventDefault();
+    
     signInWithEmailAndPassword(email, password);
     if (user) {
       window.location.href = "/home";
@@ -22,28 +23,6 @@ const LoginForm = () => {
       setErrorMessage("Erro ao tentar fazer login. Tente novamente.");
     }
   }
-
-  //const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //  event.preventDefault();
-  //  setErrorMessage("");
-//
-  //  try {
-  //    const response = await axios.post("http://127.0.0.1:8000/login", {
-  //      email,
-  //      password,
-  //    });
-  //    const { access_token } = response.data;
-  //    localStorage.setItem("token", access_token); // armazenando o token no localStorage
-  //    // redirecionando o usuário para outra página após o login
-  //    window.location.href = "/home";
-  //  } catch (error: AxiosError | any) {
-  //    if (error.response) {
-  //      setErrorMessage(error.response.data.message);
-  //    } else {
-  //      setErrorMessage("Erro ao tentar fazer login. Tente novamente.");
-  //    }
-  //  }
-  //};
 
   return (
     <S.Container>

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import * as S from "./LoginRegister";
 import Logo from "../components/Img/Logo";
-import { AxiosError } from "axios";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { auth } from "../services/firebaseConfig";
+import { AuthLoading } from "../components";
 
 const RegistroForm = () => {
   const [name, setName] = useState("");
@@ -11,44 +11,19 @@ const RegistroForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  //const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-  //  event.preventDefault();
-  //  setErrorMessage("");
-//
-  //  if (password !== confirmPassword) {
-  //    setErrorMessage("As senhas não correspondem.");
-  //    return;
-  //  }
-//
-  //  try {
-  //    const response = await axios.post("http://127.0.0.1:8000/register", {
-  //      name,
-  //      email,
-  //      password,
-  //    });
-  //    const { access_token } = response.data;
-  //    localStorage.setItem("token", access_token);
-  //    window.location.href = "/dashboard";
-  //  } catch (error: AxiosError | any) {
-  //    if (error.response) {
-  //      setErrorMessage(error.response.data.message);
-  //    } else {
-  //      setErrorMessage(
-  //        "Erro ao tentar se registrar. Tente novamente mais tarde."
-  //      );
-  //    }
-  //  }
-  //};
-  const [createUserWithEmailAndPassword, user, error] =
+  const [isLoading, setIsLoading] = useState(false); 
+  const [createUserWithEmailAndPassword] =
     useCreateUserWithEmailAndPassword(auth);
 
-  function handleSignOut(e: { preventDefault: () => void; }) {
+  async function handleSignOut(e: { preventDefault: () => void; }) {
     e.preventDefault();
-    createUserWithEmailAndPassword(email, password);
-    if (user){
+    setIsLoading(true); // inicia a exibição do componente de carregamento
+    try {
+      await createUserWithEmailAndPassword(email, password);
+      setIsLoading(false); // finaliza a exibição do componente de carregamento
       window.location.href = "/login";
-    } else if (error){
+    } catch (error) {
+      setIsLoading(false); // finaliza a exibição do componente de carregamento
       setErrorMessage("Erro ao tentar se registrar. Tente novamente.");
     }
   }
@@ -99,6 +74,7 @@ const RegistroForm = () => {
       <a href="/login">
         <S.Button>Fazer login</S.Button>
       </a>
+      {isLoading && <AuthLoading />}
     </S.Card>
   );
 };
